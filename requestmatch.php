@@ -4,10 +4,10 @@
 // a client requests a new match. look for open matches or create a new one.
 
 
-//get a random string for player tokens. player tokens will be given to each new player
+//get a random string for player secret tokens (like a password). player tokens will be given to each new player only once.
 function createPlayerToken()
 {
-	$arr = str_split('ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'); // get all the characters into an array
+	$arr = str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'); // get all the characters into an array
     shuffle($arr); // randomize the array
     $arr = array_slice($arr, 0, 10); // get the first ten (random) characters out
     $str = implode('', $arr); // smush them back into a string
@@ -20,13 +20,9 @@ if( !isset($_GET['playername']) )
 	die("playername not set");
 }
 
-include("connect.php");
+include_once("connect.php");
 
 $playername = mysql_real_escape_string($_GET['playername']);
-
-$waitingForPlayersString = "waiting for second player";
-
-$matchesTableName = 'aimatches';
 
 $result = mysql_query("SELECT * FROM $matchesTableName WHERE status='$waitingForPlayersString' AND player1!='$playername'");
 

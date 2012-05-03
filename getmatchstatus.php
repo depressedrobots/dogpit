@@ -8,12 +8,9 @@ if( !isset($_GET['matchid']) )
 	die("error! matchid not set");
 }
 
-include("connect.php");
+include_once("connect.php");
 
 $matchid = mysql_real_escape_string($_GET['matchid']);
-
-$matchesTableName = 'aimatches';
-$actionsTableName = 'aimatches_actions';
 
 $result = mysql_query("SELECT * FROM $matchesTableName WHERE ID='$matchid'");
 
@@ -31,20 +28,22 @@ else if( $num_rows != 1 )
 //get match details and print them
 $row = mysql_fetch_array($result);
 $status = $row['status'];
+$p1name = $row['player1'];
+$p2name = $row['player2'];
 
 //prepare string for script result
-$returnString = $status;
+$returnString = $status.";".$p1name." vs ".$p2name;
 
 //check for actions in this match
-$result = mysql_query("SELECT * FROM $actionsTableName WHERE ID='$matchid'");
+$result = mysql_query("SELECT * FROM $actionsTableName WHERE matchID='$matchid'");
 $num_rows = mysql_num_rows($result);
 if( $num_rows != 0 )
 {
 	while($row = mysql_fetch_array($result))
 	{
-		$playername = $row['playername'];
+		$playerNumber = $row['playernumber'];
 		$action = $row['action'];
-		$returnString .= ";$playername:$action";
+		$returnString .= ";$playerNumber:$action";
 	}
 }
 

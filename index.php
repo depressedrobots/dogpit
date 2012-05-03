@@ -1,8 +1,8 @@
 <?php
 
-include("connect.php");
+include_once("connect.php");
 
-$result = mysql_query("SELECT * FROM aimatches") 
+$result = mysql_query("SELECT * FROM $matchesTableName") 
 or die(mysql_error());  
 
 echo "<table border='1'>";
@@ -29,6 +29,6 @@ echo "<strong>Request new match: </strong>aibattle.soulmates-game.de/requestmatc
 
 echo "<br><br>";
 
-echo "<strong>Request match status: </strong>aibattle.soulmates-game.de/getmatchstatus.php?matchid=matchID<br>returns: \"[STATUS or TURN];[PLAYER NAME]:[ACTION];[PLAYER NAME]:[ACTION];...\"";
+echo "<strong>Request match status: </strong>aibattle.soulmates-game.de/getmatchstatus.php?matchid=matchID<br>returns: \"[STATUS or TURN];[PLAYER NUMBER]:[ACTION];[PLAYER NUMBER]:[ACTION];...\"";
 
 ?>
