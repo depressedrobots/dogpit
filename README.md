@@ -4,6 +4,43 @@ aibattle-server
 the AIBattle PHP matchmaking server
 
 
+connect.php
+===========
+
+<?php
+
+// db connection info. very secret!
+$host = "XXXXX";
+$user = "XXXXX"; 
+$pass= "XXXXXX";
+$database = "XXXXXXXX";
+
+// table names
+$matchesTableName = 'aimatches';
+$actionsTableName = 'aimatches_actions';
+
+// strings
+$waitingForPlayersString = "waiting for second player";
+$drawGameString = "draw game";
+$playerWonSring1 = "player ";
+$playerWonSring2 = " won";
+
+
+$con = @mysql_connect($host,$user, $pass);
+
+if (!$con) 
+{
+  die( "error! Unable to connect to the database server at this time." );
+}
+
+if (! @mysql_select_db($database) )
+{
+	die( "error! Unable to find database" );
+}
+
+?>
+
+
 table information:
 ==================
 
