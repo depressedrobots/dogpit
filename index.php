@@ -21,7 +21,7 @@ while($row = mysql_fetch_array( $result )) {
 	echo "</td></tr>"; 
 } 
 
-echo "</table>";
+echo "</table><br><br>";
 
 echo "usage:<br><br>";
 
@@ -29,6 +29,9 @@ echo "<strong>Request new match: </strong>aibattle.soulmates-game.de/requestmatc
 
 echo "<br><br>";
 
-echo "<strong>Request match status: </strong>aibattle.soulmates-game.de/getmatchstatus.php?matchid=matchID<br>returns: \"[STATUS or TURN];[PLAYER NUMBER]:[ACTION];[PLAYER NUMBER]:[ACTION];...\"";
+echo "<strong>Request match status: </strong>aibattle.soulmates-game.de/getmatchstatus.php?matchid=MatchID<br>returns: \"[STATUS or TURN];[PLAYER NUMBER]:[ACTION];[PLAYER NUMBER]:[ACTION];...\"";
 
+echo "<br><br>";
+
+echo "<strong>Post action: </strong>aibattle.soulmates-game.de/postaction.php?matchid=MatchID&playername=YourPlayerName&token=YourSecretToken&action=YourAction";
 ?>

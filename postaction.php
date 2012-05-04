@@ -90,9 +90,8 @@ $playernumber = $playername == $p1name ? 1 : 2;
 $query = "INSERT INTO $actionsTableName (matchID,playernumber,action) VALUES ($matchid,$playernumber,'$action')";
 mysql_query($query);
 
-echo "query: $query<br>";
-
 //game over?
+$gridArray = applyActionToGridArray($gridArray, $playernumber, $action);		//apply last action first
 $gameOver = isGameOver($gridArray);
 
 if( $gameOver == -1 )	// game still in progress
