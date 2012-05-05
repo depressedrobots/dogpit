@@ -1,5 +1,5 @@
-aibattle-server
-===============
+dogpit formerly known as aibattle-server
+========================================
 
 the AIBattle PHP matchmaking server
 
