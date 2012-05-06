@@ -94,12 +94,122 @@ function isLegalAction($gridArray, $action)
 	}
 	
 	//now the not-so-trivial check: is there space left in this columns?
-	if( applyActionToGridArray($gridArray, $playerNumber, $action) == null )
+        //0 is passed as $playerNumber because this is only a test if there is space left.
+        //the returned array will not be used in any way
+	if( applyActionToGridArray($gridArray, 0, $action) == null )
 	{
 		return false;
 	}
 
 	return true;
+}
+
+//helper function: changes x-y-coordinates to an index in the one-dimensional grid array
+function getGridArrayIndex($x, $y)
+{
+    global $GRID_COLUMNS;
+    $ret = ($x + ($y*$GRID_COLUMNS));
+    return $ret;
+}
+
+//helper function: computes x-y-coordinates from an GridArray index. Pass x & y as references
+function getCoordinatesOfGridArrayIndex($index, &$x, &$y)
+{
+    global $GRID_COLUMNS;
+    $x = $index % $GRID_COLUMNS;
+    $index -= $x;
+    $y = $index / $GRID_COLUMNS;
+}
+
+// returns the gridIndex of the next piece in $direction from $pieceGrindIndex
+// i.e. $pieceGridIndex = 3, $direction = right -> returns 4
+// 0 = up, 2 = right, 4 = down, 6 = left
+function getNextPieceInDirection($pieceGridIndex, $direction)
+{
+    $x = -1;
+    $y = -1;
+    getCoordinatesOfGridArrayIndex($pieceGridIndex, $x, $y);
+    
+    global $GRID_COLUMNS, $GRID_ROWS;
+    
+    //apply $direction to coordinates
+    if( $direction >= 5 )
+    {
+        $x -= 1;
+    }
+    else if( $direction >= 1 && $direction <= 3)
+    {
+        $x += 1;
+    }
+    
+    if( $direction == 7 || $direction == 0 || $direction == 1 )    //7, 0, 1 are all upish
+    {
+        $y -= 1;
+    }
+    else if( $direction == 3 || $direction == 4 || $direction == 5 )    //3, 4, 5 are all downish
+    {
+        $y += 1;
+    }
+    
+    //check for illegal moves
+    if( $x < 0 || $x >= $GRID_COLUMNS || $y < 0 || $y >= $GRID_ROWS )
+    {
+        return -1;
+    }
+    
+    return getGridArrayIndex($x, $y);
+}
+
+//checks grid for four of $player's pieces in a row
+function hasPlayerWon($gridArray, $player)
+{
+    // naive implementation: check from every of the player's stones recursively in every direction
+    // maybe I'll optimize this later on...
+    global $GRID_COLUMNS, $GRID_ROWS;
+	
+    for( $i = 0; $i < $GRID_COLUMNS*$GRID_ROWS; $i++ )
+    {
+        //ignore empty fields or opponent's pieces
+        if( $gridArray[$i] != $player )
+        {
+                continue;
+        }
+        
+        //check in every direction
+        for( $direction = 0; $direction < 8; $direction++)
+        {
+            $piecesInARow = 1;      //the starting piece counts already as first piece in the row
+            $piecesInARow += checkPiecesInDirection($i, $player, $direction, $gridArray);   //check for other pieces in same direction
+            if( $piecesInARow >= 4 )
+            {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+function checkPiecesInDirection($gridIndex, $player, $direction, $gridArray)
+{
+    $return = 0;
+    
+    //get next piece in direction
+    $nextPieceIndex = getNextPieceInDirection($gridIndex, $direction);
+    
+    if( $nextPieceIndex == -1 )
+    {
+        return $return;
+    }
+    
+    if( $gridArray[$nextPieceIndex] == $player )
+    {
+        $return++;
+        //check next piece in same direction
+        $return += checkPiecesInDirection($nextPieceIndex, $player, $direction, $gridArray);
+    }
+    
+    return $return;
 }
 
 //CAUTION: checks only whether the grid is fully occupied, not if someone has four connected!
@@ -122,6 +232,15 @@ function isDrawGame($gridArray)
 //@return: -1 game still open; 0 draw game; 1 player one won; 2 player two won
 function isGameOver($gridArray)
 {
+        if( hasPlayerWon($gridArray, "1") )
+        {
+            return 1;
+        }
+        else if ( hasPlayerWon($gridArray, "2") )
+        {
+            return 2;
+        }
+    
 	if( isDrawGame($gridArray) == true)
 	{
 		return 0;

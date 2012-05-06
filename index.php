@@ -34,4 +34,5 @@ echo "<strong>Request match status: </strong>aibattle.soulmates-game.de/getmatch
 echo "<br><br>";
 
 echo "<strong>Post action: </strong>aibattle.soulmates-game.de/postaction.php?matchid=MatchID&playername=YourPlayerName&token=YourSecretToken&action=YourAction";
+
 ?>
