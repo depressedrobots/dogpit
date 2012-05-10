@@ -20,6 +20,8 @@ if( !isset($_GET['playername']) )
 	die("playername not set");
 }
 
+include_once("cleanUpMatches.php");
+
 include_once("connect.php");
 
 $playername = mysql_real_escape_string($_GET['playername']);
